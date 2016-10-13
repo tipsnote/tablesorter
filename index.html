@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Tablesorter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-header">一覧</h2>
+        <div class="form-group">
+            <select class="sort form-control">
+                <option value="">選択してください</option>
+                <option value="1,0">高さ昇順</option>
+                <option value="1,1">高さ降順</option>
+                <option value="2,0">幅昇順</option>
+                <option value="2,1">幅降順</option>
+                <option value="3,0">厚さ昇順</option>
+                <option value="3,1">厚さ降順</option>
+                <option value="4,0">重量昇順</option>
+                <option value="4,1">重量降順</option>
+            </select>
+        </div>
+        <table class="sort_table table table-bordered">
+            <thead>
+                <tr>
+                    <th>製品</th>
+                    <th class="{sorter:'metadata'}">高さ</th>
+                    <th class="{sorter:'metadata'}">幅</th>
+                    <th class="{sorter:'metadata'}">厚さ</th>
+                    <th class="{sorter:'metadata'}">重量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product 001</td>
+                    <td class="{sortValue: 158.2}">158.2 mm</td>
+                    <td class="{sortValue: 77.9}">77.9 mm</td>
+                    <td class="{sortValue: 7.3}">7.3 mm</td>
+                    <td class="{sortValue: 188}">188 g</td>
+                </tr>
+                <tr>
+                    <td>Product 002</td>
+                    <td class="{sortValue: 138.3}">138.3 mm</td>
+                    <td class="{sortValue: 67.1}">67.1 mm</td>
+                    <td class="{sortValue: 7.1}">7.1 mm</td>
+                    <td class="{sortValue: 138}">138 g</td>
+                </tr>
+                <tr>
+                    <td>Product 003</td>
+                    <td class="{sortValue: 158.2}">158.2 mm</td>
+                    <td class="{sortValue: 77.9}">77.9 mm</td>
+                    <td class="{sortValue: 7.3}">7.3 mm</td>
+                    <td class="{sortValue: 192}">192 g</td>
+                </tr>
+                <tr>
+                    <td>Product 004</td>
+                    <td class="{sortValue: 138.3}">138.3 mm</td>
+                    <td class="{sortValue: 67.1}">67.1 mm</td>
+                    <td class="{sortValue: 7.1}">7.1 mm</td>
+                    <td class="{sortValue: 143}">143 g</td>
+                </tr>
+                <tr>
+                    <td>Product 005</td>
+                    <td class="{sortValue: 123.8}">123.8 mm</td>
+                    <td class="{sortValue: 58.6}">58.6 mm</td>
+                    <td class="{sortValue: 7.6}">7.6 mm</td>
+                    <td class="{sortValue: 113}">113 g</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="jquery.metadata.js"></script>
+    <script src="jquery.tablesorter.min.js"></script>
+    <script>
+        $('.sort_table').tablesorter();
+        $('.sort').on('change', function() {
+            $('.sort_table').tablesorter({
+                sortList: [ this.value ? this.value.split(',') : [0, 0] ]
+            });
+        });
+    </script>
+</body>
+</html>
+<!--
+# 表にソート機能を追加するプラグインの紹介
+
+表にソート機能を追加するプラグインを紹介します。
+
+「Tablesorter」を利用してソート機能を実装していきます。
+#link https://github.com/christianbach/tablesorter
+
+プラグインを利用するためにjQuery、を読み込む必要があります。
+※今回は1.x系にしましたが、1.x以外で動くかは試してないのでわかりません。
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+こちらから必要なファイルを取得します。
+Tablesorter　https://github.com/christianbach/tablesorter
+
+今回は下記2つのファイルが必要です。
+・jquery.tablesorter.min.js
+・jquery.metadata.js
+
+
+今回はselectboxの選択値でソートを実装しました。
+通常ではテーブルの見出しをクリックするとソートが出来ますが、
+見た目上、cssの実装が必要なので省略しました。
+
+
+selectのoptionのvalueにカンマ区切りでこのような形式
+「列目, 昇順 = 0 or 降順 = 1」
+で値を入れます。
+
+[html]
+<select class="sort">
+    <option value="">選択してください</option>
+    <option value="1,0">高さ: 昇順</option>
+    <option value="1,1">高さ: 降順</option>
+    <option value="2,0">幅: 昇順</option>
+    <option value="2,1">幅: 降順</option>
+    <option value="3,0">厚さ: 昇順</option>
+    <option value="3,1">厚さ: 降順</option>
+    <option value="4,0">重量: 昇順</option>
+    <option value="4,1">重量: 降順</option>
+</select>
+[/html]
+
+ソートさせる場合は「tablesorter()」のオプションに「sortList」を指定する必要があります。
+指定方法がこのようにlist形式を指定します。
+
+[js]
+tablesorter({
+    sortList: [ [0, 1] ]
+});
+[/js]
+
+このプラグインはlist内のデータ型は文字列でも問題ないようです。
+[js]
+tablesorter({
+    sortList: [ ["0", "1"] ]
+});
+[/js]
+
+選択した値(this.value)をsplit()を利用して、配列に変換させます。
+#link https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/split
+
+選択した値が空の場合は初期状態に戻します場合は。下記のように条件式を書きます。
+また、selectboxが変更されたときにsortListに値をセットするため、$.on('change')を利用します。
+
+[js]
+$('.sort').on('change', function() {
+    tablesorter({
+        sortList: [ this.value ? this.value.split(',') : [0, 0] ]
+    });
+});
+[/js]
+
+
+Tablesorterではtable内にtheadとtbodyが必須です。
+[html]
+<table>
+    <thead>
+        <tr>
+            <th>高さ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>158.2 mm</td>
+        </tr>
+    </tbody>
+</table>
+
+
+また、通常では文字列順のソートのため、数値をソートするときは下記が必要です。
+    ・「sortValue」の指定
+    ・「sortValue」を指定した見出しに「metadata」指定
+    ・jquery.metadata.jsを追加で読み込む
+
+
+今回は数値のサンプルなので、下記コードのように記述します。
+[html]
+<tr>
+    <th class="{sorter:'metadata'}">高さ</th>
+</tr>
+<tr>
+    <td class="{sortValue: 158.2}">158.2 mm</td>
+</tr>
+[/html]
+
+全体のコード
+[html]
+<select class="sort">
+    <option value="">選択してください</option>
+    <option value="1,0">高さ昇順</option>
+    <option value="1,1">高さ降順</option>
+    <option value="2,0">幅昇順</option>
+    <option value="2,1">幅降順</option>
+    <option value="3,0">厚さ昇順</option>
+    <option value="3,1">厚さ降順</option>
+    <option value="4,0">重量昇順</option>
+    <option value="4,1">重量降順</option>
+</select>
+<table class="sort_table">
+    <thead>
+        <tr>
+            <th>製品</th>
+            <th class="{sorter:'metadata'}">高さ</th>
+            <th class="{sorter:'metadata'}">幅</th>
+            <th class="{sorter:'metadata'}">厚さ</th>
+            <th class="{sorter:'metadata'}">重量</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Product 001</td>
+            <td class="{sortValue: 158.2}">158.2 mm</td>
+            <td class="{sortValue: 77.9}">77.9 mm</td>
+            <td class="{sortValue: 7.3}">7.3 mm</td>
+            <td class="{sortValue: 188}">188 g</td>
+        </tr>
+        <tr>
+            <td>Product 002</td>
+            <td class="{sortValue: 138.3}">138.3 mm</td>
+            <td class="{sortValue: 67.1}">67.1 mm</td>
+            <td class="{sortValue: 7.1}">7.1 mm</td>
+            <td class="{sortValue: 138}">138 g</td>
+        </tr>
+    </tbody>
+</table>
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="jquery.metadata.js"></script>
+<script src="jquery.tablesorter.min.js"></script>
+<script>
+    $('.sort_table').tablesorter(); //読み込み時
+    $('.sort').on('change', function() {
+        $('.sort_table').tablesorter({
+            sortList: [ this.value ? this.value.split(',') : [0, 0] ]
+        });
+    });
+</script>
+[/html]
+
+
+Tablesorterは機能が豊富なので興味ある方はドキュメントを見てください。
+以上です。
+
+
+今回のサンプルページ
+「github」
+
+
+参考リンク
+Tablesorterのドキュメント「http://tablesorter.com/docs/」
+github「https://github.com/christianbach/tablesorter」
+
+-->
